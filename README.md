@@ -1,4 +1,4 @@
 # MovieViewer
 An app that lets users view the top movies in theaters <br/> <br/>
-![An open source player](http://i.imgur.com/nxEMcHw.gifv)
+![alt tag](http://i.imgur.com/nxEMcHw.gif)
 
