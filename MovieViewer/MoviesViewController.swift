@@ -17,6 +17,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     var movies : [NSDictionary]?
     
+    var endPoint : String!
+    
     var filteredData: [NSDictionary]?
 
   
@@ -34,7 +36,7 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         
         let apiKey = "a64e63c6746e901a29a8e52b524d6cfe"
-        let url = NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")!
+        let url = NSURL(string: "https://api.themoviedb.org/3/movie/\(endPoint)?api_key=\(apiKey)")!
         let request = NSURLRequest(URL: url)
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil, delegateQueue: NSOperationQueue.mainQueue())
         let task: NSURLSessionDataTask = session.dataTaskWithRequest(request, completionHandler: {(dataOrNil, response, error)
@@ -108,7 +110,9 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         
         let baseUrl = "https://image.tmdb.org/t/p/w500/"
-        let posterPath = movie["poster_path"] as! String
+        if let posterPath = movie["poster_path"] as? String{
+            
+        
         let imageURL = NSURL(string: baseUrl + posterPath)
        
         let imageRequest = NSURLRequest(URL: imageURL!)
@@ -134,6 +138,8 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
             failure: { (imageRequest, imageResponse, error) -> Void in
                 // do something for the failure condition
         })
+        
+        }
         return cell
     }
     
@@ -174,14 +180,21 @@ class MoviesViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        let cell = sender as! UICollectionViewCell
+        let indexPath = collectionView.indexPathForCell(cell)
+        let movie = filteredData![indexPath!.row]
+        
+        let detail = segue.destinationViewController as! DetailViewController
+        detail.movie = movie
     }
-    */
+    
 
 }
